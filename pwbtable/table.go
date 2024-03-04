@@ -43,18 +43,17 @@ type TableMeta struct {
 }
 
 type TableState struct {
-	Status               TableStateStatus       `json:"status"`
-	StartAt              int64                  `json:"start_at"`
-	SeatMap              []int                  `json:"seat_map"`
-	BlindState           *TableBlindState       `json:"blind_state"`
-	CurrentDealerSeat    int                    `json:"current_dealer_seat"`
-	CurrentBBSeat        int                    `json:"current_bb_seat"`
-	PlayerStates         []*TablePlayerState    `json:"player_states"`
-	GameCount            int                    `json:"game_count"`
-	GamePlayerIndexes    []int                  `json:"game_player_indexes"`
-	GameState            *pokerface.GameState   `json:"game_state"`
-	LastPlayerGameAction *TablePlayerGameAction `json:"last_player_game_action"`
-	NextBBOrderPlayerIDs []string               `json:"next_bb_order_player_ids"`
+	Status               TableStateStatus     `json:"status"`
+	StartAt              int64                `json:"start_at"`
+	SeatMap              []int                `json:"seat_map"`
+	BlindState           *TableBlindState     `json:"blind_state"`
+	CurrentDealerSeat    int                  `json:"current_dealer_seat"`
+	CurrentBBSeat        int                  `json:"current_bb_seat"`
+	PlayerStates         []*TablePlayerState  `json:"player_states"`
+	GameCount            int                  `json:"game_count"`
+	GamePlayerIndexes    []int                `json:"game_player_indexes"`
+	GameState            *pokerface.GameState `json:"game_state"`
+	NextBBOrderPlayerIDs []string             `json:"next_bb_order_player_ids"`
 }
 
 type TablePlayerGameAction struct {
