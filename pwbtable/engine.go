@@ -157,13 +157,12 @@ func (te *tableEngine) CreateTable(tableSetting TableSetting) (*Table, error) {
 			SB:     UnsetValue,
 			BB:     UnsetValue,
 		},
-		CurrentDealerSeat:    UnsetValue,
-		CurrentBBSeat:        UnsetValue,
-		SeatMap:              NewDefaultSeatMap(tableSetting.Meta.TableMaxSeatCount),
-		PlayerStates:         make([]*TablePlayerState, 0),
-		GamePlayerIndexes:    make([]int, 0),
-		Status:               TableStateStatus_TableCreated,
-		NextBBOrderPlayerIDs: make([]string, 0),
+		CurrentDealerSeat: UnsetValue,
+		CurrentBBSeat:     UnsetValue,
+		SeatMap:           NewDefaultSeatMap(tableSetting.Meta.TableMaxSeatCount),
+		PlayerStates:      make([]*TablePlayerState, 0),
+		GamePlayerIndexes: make([]int, 0),
+		Status:            TableStateStatus_TableCreated,
 	}
 	table.State = &state
 	te.table = table
@@ -202,7 +201,7 @@ func (te *tableEngine) StartTableGame() error {
 }
 
 func (te *tableEngine) TableGameOpen() error {
-	err := te.openGame()
+	newTable, err := te.openGame(te.table)
 
 	retry := 7
 	if err != nil {
@@ -211,7 +210,7 @@ func (te *tableEngine) TableGameOpen() error {
 
 			for i := 0; i < retry; i++ {
 				time.Sleep(time.Second * 3)
-				err = te.openGame()
+				newTable, err = te.openGame(te.table)
 				if err != nil {
 					if err == ErrTableOpenGameFailed {
 						fmt.Printf("table (%s): failed to open game. retry %d time(s)...\n", te.table.ID, i+1)
@@ -232,7 +231,7 @@ func (te *tableEngine) TableGameOpen() error {
 			return err
 		}
 	}
-
+	te.table = newTable
 	te.emitEvent("TableGameOpen", "")
 
 	return te.startGame()
