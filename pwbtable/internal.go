@@ -157,6 +157,10 @@ func (te *tableEngine) batchRemovePlayers(playerIDs []string) {
 }
 
 func (te *tableEngine) openGame(oldTable *Table) (*Table, error) {
+	if !oldTable.State.BlindState.IsSet() {
+		return oldTable, ErrTableOpenGameFailed
+	}
+
 	cloneTable, err := oldTable.Clone()
 	if err != nil {
 		return oldTable, err
