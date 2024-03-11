@@ -6,9 +6,9 @@ namespace Code.Prefab.Common
     public class Card : MonoBehaviour
     {
         [SerializeField] private Image imageCard;
-        [SerializeField] private Image imageNumber;
-        [SerializeField] private Image imageTypeSmall;
-        [SerializeField] private Image imageTypeLarge;
+        [SerializeField] private Image imageNumberSmall;
+        [SerializeField] private Image imageType;
+        [SerializeField] private Image imageNumberLarge;
         
         [Header("Background")]
         [SerializeField] private Sprite imageCardBack;
@@ -37,9 +37,9 @@ namespace Code.Prefab.Common
         public void SetBlank()
         {
             imageCard.sprite = imageCardBack;
-            imageNumber.gameObject.SetActive(false);
-            imageTypeSmall.gameObject.SetActive(false);
-            imageTypeLarge.gameObject.SetActive(false);
+            imageNumberSmall.gameObject.SetActive(false);
+            imageType.gameObject.SetActive(false);
+            imageNumberLarge.gameObject.SetActive(false);
             gameObject.SetActive(true); 
         }
 
@@ -78,14 +78,14 @@ namespace Code.Prefab.Common
                     _ => null
                 };
                 
-                imageNumber.gameObject.SetActive(number);
-                imageNumber.sprite = number;
+                imageNumberSmall.gameObject.SetActive(number);
+                imageNumberSmall.sprite = number;
                 
-                imageTypeSmall.gameObject.SetActive(type);
-                imageTypeSmall.sprite = type;
+                imageType.gameObject.SetActive(type);
+                imageType.sprite = type;
                 
-                imageTypeLarge.gameObject.SetActive(type);
-                imageTypeLarge.sprite = type;
+                imageNumberLarge.gameObject.SetActive(number);
+                imageNumberLarge.sprite = number;
             }
             else
             {

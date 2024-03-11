@@ -19,12 +19,16 @@ namespace Code.Prefab.Game
         [SerializeField] private GameObject gameObjectNameAndPoint;
         [SerializeField] private TMP_Text textName;
         [SerializeField] private TMP_Text textPoint;
-        [SerializeField] private GameObject gameObjectDidActionBg;
-        [SerializeField] private Image imageDidActionBg;
-        [SerializeField] private TMP_Text textDidAction;
+        [SerializeField] private GameObject objectIsDealer;
+        [SerializeField] private Image imageDidAction;
+        [SerializeField] private GameObject objectWinner;
 
-        [Header("Did Action Background")] 
+        [Header("Did Action")] 
         [SerializeField] private Sprite spriteFold;
+        [SerializeField] private Sprite spriteCall;
+        [SerializeField] private Sprite spriteCheck;
+        [SerializeField] private Sprite spriteBet;
+        [SerializeField] private Sprite spriteRaise;
         [SerializeField] private Sprite spriteAllIn;
 
         [Header("Avatar")] 
@@ -51,7 +55,9 @@ namespace Code.Prefab.Game
             imageCountDown.gameObject.SetActive(false);
             imageAvatar.sprite = null;
             gameObjectNameAndPoint.gameObject.SetActive(false);
-            gameObjectDidActionBg.gameObject.SetActive(false);
+            objectWinner.SetActive(false);
+            objectIsDealer.SetActive(false);
+            imageDidAction.gameObject.SetActive(false);
 
             _myId = "";
             _latestUserId = "";
@@ -96,6 +102,7 @@ namespace Code.Prefab.Game
 
         public void SetTablePlayer(TablePlayerState player)
         {
+            UpdatePositionInfo(player.Positions);
             CheckUpdateName(player.PlayerID, player.Seat);
             textPoint.text = player.Bankroll.ToString();
             SetIsParticipated(player.IsParticipated);
@@ -112,13 +119,14 @@ namespace Code.Prefab.Game
             SetAvatar(seat);
 
             ConnectionHelper.Instance.SendGetPlayer(
-                playerID, 
+                playerID,
                 null,
                 resp =>
                 {
                     if (resp.Error != null)
                     {
-                        CommonHelper.LogError(resp.Method + ",  Error. [Code]" + resp.Error.Code + ", [Message]" + resp.Error.Message);
+                        CommonHelper.LogError(resp.Method + ",  Error. [Code]" + resp.Error.Code + ", [Message]" +
+                                              resp.Error.Message);
                     }
                     else
                     {
@@ -169,11 +177,17 @@ namespace Code.Prefab.Game
             imageAvatar.gameObject.SetActive(targetSprite);
         }
 
+        private void UpdatePositionInfo([CanBeNull] ICollection<string> positions)
+        {
+            objectIsDealer.SetActive(positions != null && positions.Contains("dealer"));
+        }
+
         public void SetGameStatePlayerState([CanBeNull] PlayerState player, int actionTimeInSecond,
             long actionEndAtInMilliseconds, UnityAction readyActionsCallback,
             UnityAction<List<string>, long> allowedActionsCallback, [CanBeNull] GameSoundEffect gameSoundEffect)
         {
             _gameSoundEffect = gameSoundEffect;
+            // UpdatePositionInfo(player?.Positions);
             UpdateDidAction(player?.DidAction);
 
             _countDownTimer?.StopTimer();
@@ -194,7 +208,8 @@ namespace Code.Prefab.Game
                 {
                     allowedActionsCallback.Invoke(player.AllowedActions, player.Bankroll);
 
-                    if (player.AllowedActions != null && player.AllowedActions.Contains(Constant.GameStatusPlayerActionReady))
+                    if (player.AllowedActions != null &&
+                        player.AllowedActions.Contains(Constant.GameStatusPlayerActionReady))
                     {
                         readyActionsCallback.Invoke();
                     }
@@ -228,7 +243,6 @@ namespace Code.Prefab.Game
 
         public void SetWinner()
         {
-            // todo move winner indicate, and process when to remove it
             UpdateDidAction("Winner");
         }
 
@@ -238,36 +252,37 @@ namespace Code.Prefab.Game
             {
                 _gameSoundEffect.PlayCountdown();
             }
-            
+
             imageCountDown.fillAmount = remainTimeInSecond / actionTimeInSecond;
             imageCountDown.gameObject.SetActive(true);
         }
 
         private void UpdateDidAction([CanBeNull] string didAction)
         {
-            if (string.IsNullOrEmpty(didAction))
+            if (didAction == "Winner")
             {
-                gameObjectDidActionBg.gameObject.SetActive(false);
+                objectWinner.SetActive(true);
+                objectIsDealer.SetActive(false);
+                imageDidAction.gameObject.SetActive(false);
             }
             else
             {
+                objectWinner.SetActive(false);
+
                 if (_gameSoundEffect) _gameSoundEffect.PlayDidAction(didAction);
-                
+
                 var sprite = didAction switch
                 {
                     Constant.GameStatusPlayerAction.Fold => spriteFold,
+                    Constant.GameStatusPlayerAction.Call => spriteCall,
+                    Constant.GameStatusPlayerAction.Check => spriteCheck,
+                    Constant.GameStatusPlayerAction.Bet => spriteBet,
+                    Constant.GameStatusPlayerAction.Raise => spriteRaise,
                     Constant.GameStatusPlayerAction.Allin => spriteAllIn,
                     _ => null
                 };
-
-                imageDidActionBg.sprite = sprite;
-
-                // todo remove it when all action has background
-                imageDidActionBg.color = sprite ? Color.white : Color.black;
-
-                textDidAction.text = didAction;
-
-                gameObjectDidActionBg.gameObject.SetActive(true);
+                imageDidAction.sprite = sprite;
+                imageDidAction.gameObject.SetActive(sprite);
             }
         }
     }
