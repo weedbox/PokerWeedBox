@@ -40,13 +40,14 @@ namespace Code.Prefab.Home
 
             _canvas = GameObject.Find("Canvas");
 
-            ShowGameList(false);
-
-            btnGameTypeCash.onClick.AddListener(() =>
-            {
-                ShowGameList(true);
-                SendListGames();
-            });
+            // ShowGameList(false);
+            //
+            // btnGameTypeCash.onClick.AddListener(() =>
+            // {
+            //     ShowGameList(true);
+            //     SendListGames();
+            // });
+            // ShowGameList(true);
         }
 
         public void SetCashOutCompleteCallback(UnityAction value)
@@ -54,18 +55,18 @@ namespace Code.Prefab.Home
             _onCashOutComplete = value;
         }
 
-        public void ShowGameList(bool value)
-        {
-            gameObjectType.SetActive(!value);
-            gameObjectList.SetActive(value);
-        }
+        // public void ShowGameList(bool value)
+        // {
+        //     gameObjectType.SetActive(!value);
+        //     gameObjectList.SetActive(value);
+        // }
 
         public void UpdateChip(string value)
         {
             _totalChip = value;
         }
 
-        private void SendListGames()
+        public void SendListGames()
         {
             CommonHelper.ShowLoading(_canvas);
             ClearCashGameList();

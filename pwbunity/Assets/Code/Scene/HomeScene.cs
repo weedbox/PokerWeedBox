@@ -12,7 +12,9 @@ namespace Code.Scene
     {
         [SerializeField] private Button buttonTopLeft;
         [SerializeField] private Button buttonTopRight;
-        [SerializeField] private TMP_Text textUserChip;
+        [SerializeField] private TMP_Text textName;
+        [SerializeField] private TMP_Text textID;
+        [SerializeField] private TMP_Text textChip;
         [SerializeField] private Button btnTab1;
         [SerializeField] private Button btnTab2;
         [SerializeField] private Button btnTab3;
@@ -32,16 +34,16 @@ namespace Code.Scene
 
             _canvas = GameObject.Find("Canvas");
 
-            UpdateTabs(1);
+            // UpdateTabs(1);
 
             buttonTopLeft.onClick.AddListener(Logout);
             buttonTopRight.onClick.AddListener(() =>
                 Instantiate(Resources.Load<HomeSubMenu>("Prefabs/Home/HomeSubMenu"), _canvas.transform, false));
 
-            btnTab1.onClick.AddListener(() => UpdateTabs(1));
-            btnTab2.onClick.AddListener(() => UpdateTabs(2));
-            btnTab3.onClick.AddListener(() => UpdateTabs(3));
-            btnTab4.onClick.AddListener(() => UpdateTabs(4));
+            // btnTab1.onClick.AddListener(() => UpdateTabs(1));
+            // btnTab2.onClick.AddListener(() => UpdateTabs(2));
+            // btnTab3.onClick.AddListener(() => UpdateTabs(3));
+            // btnTab4.onClick.AddListener(() => UpdateTabs(4));
 
             tab1.SetCashOutCompleteCallback(SendGetPlayerLatestData);
 
@@ -97,6 +99,7 @@ namespace Code.Scene
                         return;
 
                     SendGetPlayerLatestData();
+                    tab1.SendListGames();
                 });
         }
 
@@ -124,7 +127,9 @@ namespace Code.Scene
 
                         _totalChip = resp.Result.Chip;
                         tab1.UpdateChip(_totalChip);
-                        textUserChip.text = "Chip: " + _totalChip;
+                        textName.text = resp.Result.DisplayName;
+                        textID.text = "ID:" + resp.Result.ID;
+                        textChip.text = "Chip:" + _totalChip;
                     }
                 });
         }
@@ -135,24 +140,24 @@ namespace Code.Scene
             SceneManager.LoadScene(nameof(LoginScene));
         }
 
-        private void UpdateTabs(int enableTab)
-        {
-            btnTab1.interactable = enableTab != 1;
-            tab1.gameObject.SetActive(enableTab == 1);
-
-            btnTab2.interactable = enableTab != 2;
-            tab2.gameObject.SetActive(enableTab == 2);
-
-            btnTab3.interactable = enableTab != 3;
-            tab3.gameObject.SetActive(enableTab == 3);
-
-            btnTab4.interactable = enableTab != 4;
-            tab4.gameObject.SetActive(enableTab == 4);
-
-            if (enableTab == 1)
-            {
-                tab1.ShowGameList(false);
-            }
-        }
+        // private void UpdateTabs(int enableTab)
+        // {
+        //     btnTab1.interactable = enableTab != 1;
+        //     tab1.gameObject.SetActive(enableTab == 1);
+        //
+        //     btnTab2.interactable = enableTab != 2;
+        //     tab2.gameObject.SetActive(enableTab == 2);
+        //
+        //     btnTab3.interactable = enableTab != 3;
+        //     tab3.gameObject.SetActive(enableTab == 3);
+        //
+        //     btnTab4.interactable = enableTab != 4;
+        //     tab4.gameObject.SetActive(enableTab == 4);
+        //
+        //     if (enableTab == 1)
+        //     {
+        //         tab1.ShowGameList(false);
+        //     }
+        // }
     }
 }
