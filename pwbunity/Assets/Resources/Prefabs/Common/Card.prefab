@@ -470,9 +470,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   imageCard: {fileID: 9024354876565924215}
-  imageNumberSmall: {fileID: 0}
-  imageType: {fileID: 0}
-  imageNumberLarge: {fileID: 0}
+  imageNumberSmall: {fileID: 1752014193357986568}
+  imageType: {fileID: 241202823634912201}
+  imageNumberLarge: {fileID: 7133561641363973105}
   imageCardBack: {fileID: 21300000, guid: c8cbc79927a814528b1f06271b7fe1a7, type: 3}
   imageCardFront: {fileID: 21300000, guid: e13452c26eda84c26a4ee3a625854919, type: 3}
   imageNumbersBlack:
