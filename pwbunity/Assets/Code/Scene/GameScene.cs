@@ -44,6 +44,7 @@ namespace Code.Scene
         [SerializeField] private Button buttonCheck;
         [SerializeField] private Button buttonBet;
         [SerializeField] private Button buttonRaise;
+        [SerializeField] private Button buttonCommonAllin;
 
         [SerializeField] private GameObject betActions;
         [SerializeField] private Button buttonBetClose;
@@ -53,6 +54,7 @@ namespace Code.Scene
         [SerializeField] private TMP_Text textBetTwoThirds;
         [SerializeField] private Button buttonBetOneTime;
         [SerializeField] private TMP_Text textBetOneTime;
+        [SerializeField] private Button buttonBetAllin;
 
         [SerializeField] private GameObject raiseActions;
         [SerializeField] private Button buttonRaiseClose;
@@ -64,13 +66,15 @@ namespace Code.Scene
         [SerializeField] private TMP_Text textRaiseFourTimes;
         [SerializeField] private Button buttonRaiseFiveTimes;
         [SerializeField] private TMP_Text textRaiseFiveTimes;
+        [SerializeField] private Button buttonRaiseAllin;
+        
 
-        [SerializeField] private Button buttonAllin;
-
-        [Header("Auto Mode")] [SerializeField] private GameObject autoMode;
+        [Header("Auto Mode")] 
+        [SerializeField] private GameObject autoMode;
         [SerializeField] private Button buttonDisableAutoMode;
 
-        [Header("Table")] [SerializeField] private GameObject gameObjectBoardCard;
+        [Header("Table")] 
+        [SerializeField] private GameObject gameObjectBoardCard;
         [SerializeField] private Card[] boardCards = new Card[5];
         [SerializeField] private GameObject gameObjectMainPot;
         [SerializeField] private TMP_Text textMainPot;
@@ -202,7 +206,9 @@ namespace Code.Scene
                 }
             });
 
-            buttonAllin.onClick.AddListener(() => { SendPlayerWager(Constant.GameStatusPlayerAction.Allin); });
+            buttonCommonAllin.onClick.AddListener(() => { SendPlayerWager(Constant.GameStatusPlayerAction.Allin); });
+            buttonBetAllin.onClick.AddListener(() => { SendPlayerWager(Constant.GameStatusPlayerAction.Allin); });
+            buttonRaiseAllin.onClick.AddListener(() => { SendPlayerWager(Constant.GameStatusPlayerAction.Allin); });
 
             buttonDisableAutoMode.onClick.AddListener(() =>
             {
@@ -756,16 +762,13 @@ namespace Code.Scene
                             betActions.SetActive(false);
                             raiseActions.SetActive(false);
 
-                            buttonFold.interactable =
-                                allowedActions.Contains(Constant.GameStatusPlayerAction.Fold);
-                            buttonCall.interactable =
-                                allowedActions.Contains(Constant.GameStatusPlayerAction.Call);
-                            buttonCheck.interactable =
-                                allowedActions.Contains(Constant.GameStatusPlayerAction.Check);
+                            buttonFold.gameObject.SetActive(allowedActions.Contains(Constant.GameStatusPlayerAction.Fold));
+                            buttonCall.gameObject.SetActive(allowedActions.Contains(Constant.GameStatusPlayerAction.Call));
+                            buttonCheck.gameObject.SetActive(allowedActions.Contains(Constant.GameStatusPlayerAction.Check));
                             if (latestPots is { Count: > 0 } &&
                                 allowedActions.Contains(Constant.GameStatusPlayerAction.Bet))
                             {
-                                buttonBet.interactable = true;
+                                buttonBet.gameObject.SetActive(true);
 
                                 var totalPot = latestPots.Sum(item => item.Total);
 
@@ -778,13 +781,13 @@ namespace Code.Scene
                             }
                             else
                             {
-                                buttonBet.interactable = false;
+                                buttonBet.gameObject.SetActive(false);
                             }
 
                             if (latestAction is { Value: not null } &&
                                 allowedActions.Contains(Constant.GameStatusPlayerAction.Raise))
                             {
-                                buttonRaise.interactable = true;
+                                buttonRaise.gameObject.SetActive(true);
 
                                 UpdateBetRaiseInfo(buttonRaiseTwice, textRaiseTwice, "Raise 2x\n", point,
                                     (latestAction.Value ?? 0L) * 2, table.Meta.MinChipUnit);
@@ -797,11 +800,12 @@ namespace Code.Scene
                             }
                             else
                             {
-                                buttonRaise.interactable = false;
+                                buttonRaise.gameObject.SetActive(false);
                             }
 
-                            buttonAllin.interactable =
-                                allowedActions.Contains(Constant.GameStatusPlayerAction.Allin);
+                            buttonCommonAllin.gameObject.SetActive(allowedActions.Contains(Constant.GameStatusPlayerAction.Allin));
+                            buttonBetAllin.gameObject.SetActive(allowedActions.Contains(Constant.GameStatusPlayerAction.Allin));
+                            buttonRaiseAllin.gameObject.SetActive(allowedActions.Contains(Constant.GameStatusPlayerAction.Allin));
                         }
                         else
                         {
