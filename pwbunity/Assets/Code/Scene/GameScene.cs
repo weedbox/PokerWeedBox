@@ -23,6 +23,7 @@ namespace Code.Scene
 
         [SerializeField] private TMP_Text textJitterInfo;
         [SerializeField] private TMP_Text textTableSetting;
+        [SerializeField] private TMP_Text textTableID;
         [SerializeField] private Button buttonTopLeft;
         [SerializeField] private Button buttonTopRight;
 
@@ -386,18 +387,10 @@ namespace Code.Scene
             var setting = _competitionName + " (" + _tableName + ")";
             if (table.State is { BlindState: not null })
             {
-                setting += "\n盲注: " + table.State.BlindState.Sb + "/" + table.State.BlindState.Bb;
+                setting += "\nBlinds: " + table.State.BlindState.Sb + "/" + table.State.BlindState.Bb;
             }
-
-            setting += "\n動作時間: " + table.Meta.ActionTime;
-
-            var totalTime = table.Meta.MaxDuration;
-            var hour = totalTime / 3600;
-            var min = (totalTime - hour * 3600) / 60;
-            var second = totalTime % 60;
-            setting += "\n比賽時間總長: " + hour.ToString("00") + ":" + min.ToString("00") + ":" + second.ToString("00");
-
             textTableSetting.text = setting;
+            textTableID.text = "ID: " + _tableID;
 
             // skip all event when in settled delay
             if (_isInSettledDelay) return;
