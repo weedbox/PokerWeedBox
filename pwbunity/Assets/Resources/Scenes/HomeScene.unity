@@ -421,7 +421,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4788139999118332166, guid: 55a2e6b6c4df1427c882087c95a6d30c, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.000895779
+      value: -0.000063955784
       objectReference: {fileID: 0}
     - target: {fileID: 5055861250220999511, guid: 55a2e6b6c4df1427c882087c95a6d30c, type: 3}
       propertyPath: m_AnchorMax.x
@@ -711,7 +711,7 @@ GameObject:
   - component: {fileID: 412602419}
   - component: {fileID: 412602418}
   m_Layer: 5
-  m_Name: Text (TMP) User Cpp
+  m_Name: Text (TMP) User Chip
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2577,7 +2577,7 @@ MonoBehaviour:
   commonSoundEffect: {fileID: 750098848}
   buttonTopLeft: {fileID: 591706322}
   buttonTopRight: {fileID: 240100436}
-  textUserCpp: {fileID: 412602418}
+  textUserChip: {fileID: 412602418}
   btnTab1: {fileID: 914237541}
   btnTab2: {fileID: 1335843452}
   btnTab3: {fileID: 2064631062}

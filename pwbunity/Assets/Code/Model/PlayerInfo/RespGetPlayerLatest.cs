@@ -7,7 +7,7 @@ namespace Code.Model.PlayerInfo
         [JsonProperty("id")] public string ID;
         [JsonProperty("uid")] public string Uid;
         [JsonProperty("display_name")] public string DisplayName;
-        [JsonProperty("cpp")] public string CPP;
+        [JsonProperty("cpp")] public string Chip;
         [JsonProperty("tickets")] public int Tickets;
     }
 }

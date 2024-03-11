@@ -12,7 +12,7 @@ namespace Code.Scene
     {
         [SerializeField] private Button buttonTopLeft;
         [SerializeField] private Button buttonTopRight;
-        [SerializeField] private TMP_Text textUserCpp;
+        [SerializeField] private TMP_Text textUserChip;
         [SerializeField] private Button btnTab1;
         [SerializeField] private Button btnTab2;
         [SerializeField] private Button btnTab3;
@@ -24,7 +24,7 @@ namespace Code.Scene
 
         private GameObject _canvas;
 
-        private string _totalCPP = "";
+        private string _totalChip = "";
 
         protected override void Start()
         {
@@ -122,9 +122,9 @@ namespace Code.Scene
                     {
                         PlayerPrefs.SetString(Constant.PfKeyUserID, resp.Result.ID);
 
-                        _totalCPP = resp.Result.CPP;
-                        tab1.UpdateCPP(_totalCPP);
-                        textUserCpp.text = "CPP: " + _totalCPP;
+                        _totalChip = resp.Result.Chip;
+                        tab1.UpdateChip(_totalChip);
+                        textUserChip.text = "Chip: " + _totalChip;
                     }
                 });
         }

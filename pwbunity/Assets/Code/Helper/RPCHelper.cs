@@ -133,7 +133,7 @@ namespace Code.Helper
 
         #region Match
 
-        public void SendCompetitionCashBuyIn(string competitionId, string cpp,
+        public void SendCompetitionCashBuyIn(string competitionId, string chip,
             UnityAction<RPCResponse<object>> callback)
         {
             const string latitude = "";
@@ -141,7 +141,7 @@ namespace Code.Helper
             var rpc = new RPCRequest
             {
                 Method = "Match.CompetitionCashBuyIn",
-                Parameters = new List<object> { competitionId, cpp, latitude, longitude }
+                Parameters = new List<object> { competitionId, chip, latitude, longitude }
             };
 
             SendMessage(rpc, callback);

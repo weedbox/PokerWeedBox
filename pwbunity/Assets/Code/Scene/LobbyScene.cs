@@ -32,7 +32,7 @@ namespace Code.Scene
         private readonly List<ListCompetition> _listCashCompetitions = new();
         private string _displayName = "";
         private string _playerId = "";
-        private string _totalCPP = "";
+        private string _totalChip = "";
 
         private const float PollingInterval = 10f;
         private TimerHelper _pollingActiveCompetitions;
@@ -212,9 +212,9 @@ namespace Code.Scene
                     {
                         PlayerPrefs.SetString(Constant.PfKeyUserID, resp.Result.ID);
 
-                        _totalCPP = resp.Result.CPP;
+                        _totalChip = resp.Result.Chip;
                         textUserInfo.text = _displayName + " (" + _playerId + ")" +
-                                            "\nCPP:" + _totalCPP + " | Tickets:" + resp.Result.Tickets;
+                                            "\nChip:" + _totalChip + " | Tickets:" + resp.Result.Tickets;
                     }
                 });
         }
@@ -392,14 +392,14 @@ namespace Code.Scene
                                     activeCompetition,
                                     (competitionId, competitionName) =>
                                     {
-                                        // todo find buyInCpp
-                                        const long buyInCpp = 1000;
-                                        if (long.Parse(_totalCPP) <= buyInCpp)
+                                        // todo find buyInChip
+                                        const long buyInChip = 1000;
+                                        if (long.Parse(_totalChip) <= buyInChip)
                                         {
                                             CommonHelper.ShowCommonDialog(
                                                 canvas: _canvas,
                                                 title: "Balance not enough",
-                                                message: "Cpp " + _totalCPP + " not enough, at least " + buyInCpp +
+                                                message: "Chip " + _totalChip + " not enough, at least " + buyInChip +
                                                          " is need",
                                                 negative: "Close");
                                             return;
@@ -408,7 +408,7 @@ namespace Code.Scene
                                         CommonHelper.ShowLoading(_canvas);
                                         ConnectionHelper.Instance.SendCompetitionCashBuyIn(
                                             competitionId,
-                                            buyInCpp.ToString(),
+                                            buyInChip.ToString(),
                                             cashBuyInResp =>
                                             {
                                                 if (!CommonHelper.CheckResponseIsSuccess(_canvas, cashBuyInResp.Method,

@@ -27,7 +27,7 @@ namespace Code.Prefab.Home
         private GameObject _canvas;
 
         private readonly List<ListCompetition> _listCashCompetitions = new();
-        private string _totalCPP = "";
+        private string _totalChip = "";
 
         private const float PollingInterval = 10f;
         private TimerHelper _pollingActiveCompetitions;
@@ -60,9 +60,9 @@ namespace Code.Prefab.Home
             gameObjectList.SetActive(value);
         }
 
-        public void UpdateCPP(string value)
+        public void UpdateChip(string value)
         {
-            _totalCPP = value;
+            _totalChip = value;
         }
 
         private void SendListGames()
@@ -251,14 +251,14 @@ namespace Code.Prefab.Home
                                     activeCompetition,
                                     (competitionId, competitionName) =>
                                     {
-                                        // todo find buyInCpp
-                                        const long buyInCpp = 1000;
-                                        if (long.Parse(_totalCPP) <= buyInCpp)
+                                        // todo find buyInChip
+                                        const long buyInChip = 1000;
+                                        if (long.Parse(_totalChip) <= buyInChip)
                                         {
                                             CommonHelper.ShowCommonDialog(
                                                 canvas: _canvas,
                                                 title: "Balance not enough",
-                                                message: "Cpp " + _totalCPP + " not enough, at least " + buyInCpp +
+                                                message: "Chip " + _totalChip + " not enough, at least " + buyInChip +
                                                          " is need",
                                                 negative: "Close");
                                             return;
@@ -267,7 +267,7 @@ namespace Code.Prefab.Home
                                         CommonHelper.ShowLoading(_canvas);
                                         ConnectionHelper.Instance.SendCompetitionCashBuyIn(
                                             competitionId,
-                                            buyInCpp.ToString(),
+                                            buyInChip.ToString(),
                                             cashBuyInResp =>
                                             {
                                                 if (!CommonHelper.CheckResponseIsSuccess(_canvas, cashBuyInResp.Method,
