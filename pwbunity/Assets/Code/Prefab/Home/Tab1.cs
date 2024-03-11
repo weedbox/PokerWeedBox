@@ -230,17 +230,17 @@ namespace Code.Prefab.Home
                     {
                         CommonHelper.HideLoading();
 
-                        var nonAfkCompetition = resp.Result.ActiveCompetitions.Find(it =>
-                            !it.IsAfk &&
-                            string.Equals(it.PlayerStatus, Constant.PlayerStatus.Playing) &&
-                            string.Equals(it.CompetitionMode, Constant.CompetitionMode.CompetitionModeCash)
-                        );
-                        if (nonAfkCompetition != null)
-                        {
-                            StartCoroutine(AutoEnterGame(nonAfkCompetition));
-                        }
-                        else
-                        {
+                        // var nonAfkCompetition = resp.Result.ActiveCompetitions.Find(it =>
+                        //     !it.IsAfk &&
+                        //     string.Equals(it.PlayerStatus, Constant.PlayerStatus.Playing) &&
+                        //     string.Equals(it.CompetitionMode, Constant.CompetitionMode.CompetitionModeCash)
+                        // );
+                        // if (nonAfkCompetition != null)
+                        // {
+                        //     StartCoroutine(AutoEnterGame(nonAfkCompetition));
+                        // }
+                        // else
+                        // {
                             var hasActiveCompetitions = false;
                             foreach (var item in _listCashCompetitions)
                             {
@@ -317,7 +317,7 @@ namespace Code.Prefab.Home
 
                             _pollingActiveCompetitions ??= new TimerHelper(this);
                             _pollingActiveCompetitions.StartTimer(PollingInterval, SendListPlayerActiveCompetitions);
-                        }
+                        // }
                     }
                 });
         }
@@ -330,14 +330,14 @@ namespace Code.Prefab.Home
             }
         }
 
-        private static IEnumerator AutoEnterGame(ActiveCompetitions nonAfkCompetition)
-        {
-            yield return new WaitForSeconds(0.5f);
-            PlayerPrefs.SetString(Constant.PfKeyCompetitionID, nonAfkCompetition.CompetitionID);
-            PlayerPrefs.SetString(Constant.PfKeyCompetitionName, nonAfkCompetition.CompetitionName);
-            PlayerPrefs.SetString(Constant.PfKeyTableID, nonAfkCompetition.TableID);
-            PlayerPrefs.SetString(Constant.PfKeyTableName, nonAfkCompetition.TableName);
-            SceneManager.LoadScene(nameof(GameScene));
-        }
+        // private static IEnumerator AutoEnterGame(ActiveCompetitions nonAfkCompetition)
+        // {
+        //     yield return new WaitForSeconds(0.5f);
+        //     PlayerPrefs.SetString(Constant.PfKeyCompetitionID, nonAfkCompetition.CompetitionID);
+        //     PlayerPrefs.SetString(Constant.PfKeyCompetitionName, nonAfkCompetition.CompetitionName);
+        //     PlayerPrefs.SetString(Constant.PfKeyTableID, nonAfkCompetition.TableID);
+        //     PlayerPrefs.SetString(Constant.PfKeyTableName, nonAfkCompetition.TableName);
+        //     SceneManager.LoadScene(nameof(GameScene));
+        // }
     }
 }
