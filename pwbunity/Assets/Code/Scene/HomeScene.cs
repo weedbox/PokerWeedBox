@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Code.Base;
 using Code.Helper;
 using Code.Prefab.Home;
@@ -12,6 +13,7 @@ namespace Code.Scene
     {
         [SerializeField] private Button buttonTopLeft;
         [SerializeField] private Button buttonTopRight;
+        [SerializeField] private Image spriteAvatar;
         [SerializeField] private TMP_Text textName;
         [SerializeField] private TMP_Text textID;
         [SerializeField] private TMP_Text textChip;
@@ -127,7 +129,15 @@ namespace Code.Scene
 
                         _totalChip = resp.Result.Chip;
                         tab1.UpdateChip(_totalChip);
-                        textName.text = resp.Result.DisplayName;
+
+                        var displayName = resp.Result.DisplayName;
+
+                        var targetIndex = new List<string>(Constant.LoginNames).FindIndex(it => string.Equals(it, displayName));
+                        if (targetIndex != -1)
+                        {
+                            spriteAvatar.sprite = Resources.Load<Sprite>("Art/Image/Common/Avatar/" + Constant.LogonAvatars[targetIndex]); 
+                        }
+                        textName.text = displayName;
                         textID.text = "ID:" + resp.Result.ID;
                         textChip.text = "Chip:" + _totalChip;
                     }

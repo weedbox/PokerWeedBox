@@ -4,37 +4,31 @@ using Code.Base;
 using Code.Helper;
 using Code.Model.Auth;
 using Code.Model.Base;
+using Code.Prefab.Login;
 using NativeWebSocket;
 using Newtonsoft.Json;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Code.Scene
 {
     public class LoginScene : BaseScene
     {
-        [SerializeField] private TMP_Text txtPrintInfo;
-        [SerializeField] private TMP_Text txtSelectAccount;
-        [SerializeField] private Button btnLoginAnya;
-        [SerializeField] private Button btnLoginCeleste;
-        [SerializeField] private Button btnLoginEvelyn;
-        [SerializeField] private Button btnLoginFiona;
-        [SerializeField] private Button btnLoginIsabella;
-        [SerializeField] private Button btnLoginEthan;
-        [SerializeField] private Button btnLoginJames;
-        [SerializeField] private Button btnLoginMichael;
-        [SerializeField] private Button btnLoginWilliam;
+        [SerializeField] private LoginAccount[] loginAccounts = new LoginAccount[9];
+        [SerializeField] private Button btnLogin;
+        [SerializeField] private TMP_Text textLoginAccount;
 
         private GameObject _canvas;
-        
+
+        private int _selectAccountIndex = -1;
+
         protected override void Start()
         {
             base.Start();
-            
+
             _canvas = GameObject.Find("Canvas");
 
             var existToken = PlayerPrefs.GetString(Constant.PfKeyUserToken);
@@ -42,11 +36,11 @@ namespace Code.Scene
             {
                 SetButtonsVisibility(false);
 
-                txtPrintInfo.text = "Token found, start authenticate";
+                CommonHelper.Log("Token found, start authenticate");
 
                 if (ConnectionHelper.Instance.IsConnected())
                 {
-                    txtPrintInfo.text = "Socket already connected";
+                    CommonHelper.Log("Socket already connected");
                     StartCoroutine(SendAuthenticate());
                 }
                 else
@@ -55,22 +49,29 @@ namespace Code.Scene
                 }
             }
 
-            btnLoginAnya.onClick.AddListener(() => { StartLoginFlow("+886912000371"); });
-            btnLoginCeleste.onClick.AddListener(() => { StartLoginFlow("+886912000372"); });
-            btnLoginEvelyn.onClick.AddListener(() => { StartLoginFlow("+886912000373"); });
-            btnLoginFiona.onClick.AddListener(() => { StartLoginFlow("+886912000374"); });
-            btnLoginIsabella.onClick.AddListener(() => { StartLoginFlow("+886912000375"); });
-            btnLoginEthan.onClick.AddListener(() => { StartLoginFlow("+886912000376"); });
-            btnLoginJames.onClick.AddListener(() => { StartLoginFlow("+886912000377"); });
-            btnLoginMichael.onClick.AddListener(() => { StartLoginFlow("+886912000378"); });
-            btnLoginWilliam.onClick.AddListener(() => { StartLoginFlow("+886912000379"); });
+            for (var index = 0; index < loginAccounts.Length; index++)
+            {
+                loginAccounts[index].Setup(index, selectIndex =>
+                {
+                    _selectAccountIndex = selectIndex;
+                    foreach (var item in loginAccounts)
+                    {
+                        item.UpdateSelectStatus(_selectAccountIndex);
+                    }
+                    btnLogin.interactable = true;
+                    textLoginAccount.text = ("LOG IN WITH " + Constant.LoginNames[_selectAccountIndex]).ToUpper();
+                });
+            }
+            
+            btnLogin.interactable = false;
+            btnLogin.onClick.AddListener(() => StartLoginFlow(Constant.LoginPhones[_selectAccountIndex]));
         }
 
         protected override void SocketOnOpen()
         {
             base.SocketOnOpen();
 
-            txtPrintInfo.text = "SocketOnOpen";
+            CommonHelper.Log("SocketOnOpen");
             StartCoroutine(SendAuthenticate());
         }
 
@@ -78,7 +79,7 @@ namespace Code.Scene
         {
             base.SocketOnError(errorMsg);
 
-            txtPrintInfo.text = "SocketOnError:" + errorMsg;
+            ErrorOccur("SocketOnError:" + errorMsg);
             SetButtonsVisibility(true);
         }
 
@@ -86,22 +87,16 @@ namespace Code.Scene
         {
             base.SocketOnClose(closeCode);
 
-            txtPrintInfo.text = "SocketOnClose:" + closeCode;
+            ErrorOccur("SocketOnClose:" + closeCode);
             SetButtonsVisibility(true);
         }
 
         private void SetButtonsVisibility(bool visible)
         {
-            txtSelectAccount.gameObject.SetActive(visible);
-            btnLoginAnya.gameObject.SetActive(visible);
-            btnLoginCeleste.gameObject.SetActive(visible);
-            btnLoginEvelyn.gameObject.SetActive(visible);
-            btnLoginFiona.gameObject.SetActive(visible);
-            btnLoginIsabella.gameObject.SetActive(visible);
-            btnLoginEthan.gameObject.SetActive(visible);
-            btnLoginJames.gameObject.SetActive(visible);
-            btnLoginMichael.gameObject.SetActive(visible);
-            btnLoginWilliam.gameObject.SetActive(visible);
+            foreach (var item in loginAccounts)
+            {
+                item.SetClickable(visible);
+            }
         }
 
         private IEnumerator SendAuthenticate()
@@ -115,7 +110,7 @@ namespace Code.Scene
                 resp =>
                 {
                     CommonHelper.HideLoading();
-                    
+
                     if (resp.Error != null)
                     {
                         ErrorOccur("Error. [Code]" + resp.Error.Code + ", [Message]" + resp.Error.Message);
@@ -123,7 +118,7 @@ namespace Code.Scene
                     }
                     else
                     {
-                        txtPrintInfo.text = "Authenticate Success\nEnter Home scene now...";
+                        CommonHelper.Log("Authenticate Success\nEnter Home scene now...");
                         StartCoroutine(EnterHome(0.5f));
                     }
                 });
@@ -139,7 +134,10 @@ namespace Code.Scene
         {
             PlayerPrefs.SetString(Constant.PfKeyUserToken, "");
 
-            txtPrintInfo.text = "login for " + phone;
+            CommonHelper.Log("login for " + phone);
+            
+            SetButtonsVisibility(false);
+            btnLogin.interactable = false;
             StartCoroutine(AuthLoginCodeSend(phone, GameObject.Find("Canvas")));
         }
 
@@ -175,7 +173,7 @@ namespace Code.Scene
             }
             else
             {
-                txtPrintInfo.text = "Result:" + unityWebRequest.result;
+                CommonHelper.Log("Result:" + unityWebRequest.result);
             }
         }
 
@@ -197,11 +195,11 @@ namespace Code.Scene
             CommonHelper.HideLoading();
             if (unityWebRequest.result == UnityWebRequest.Result.Success)
             {
-                txtPrintInfo.text = unityWebRequest.downloadHandler.text;
+                CommonHelper.Log(unityWebRequest.downloadHandler.text);
             }
             else
             {
-                txtPrintInfo.text = "Result:" + unityWebRequest.result;
+                CommonHelper.Log("Result:" + unityWebRequest.result);
             }
         }
 
@@ -228,7 +226,7 @@ namespace Code.Scene
                 CommonHelper.Log(unityWebRequest.downloadHandler.text);
                 var resp = JsonConvert.DeserializeObject<BaseResponse<RespVerifyLoginCode>>(unityWebRequest
                     .downloadHandler.text);
-                txtPrintInfo.text = phone + " Login Success!\nToken: " + resp.Data.Token;
+                CommonHelper.Log(phone + " Login Success!\nToken: " + resp.Data.Token);
 
                 PlayerPrefs.SetString(Constant.PfKeyUserToken, resp.Data.Token);
                 StartCoroutine(EnterHome(0f));
@@ -241,7 +239,7 @@ namespace Code.Scene
 
         private void ErrorOccur(string errorMessage)
         {
-            txtPrintInfo.text = errorMessage;
+            CommonHelper.LogError(errorMessage);
             commonSoundEffect.PlayError();
         }
     }

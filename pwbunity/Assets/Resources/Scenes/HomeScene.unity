@@ -496,7 +496,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4788139999118332166, guid: 55a2e6b6c4df1427c882087c95a6d30c, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.043258704
+      value: 0.00015616887
       objectReference: {fileID: 0}
     - target: {fileID: 5055861250220999511, guid: 55a2e6b6c4df1427c882087c95a6d30c, type: 3}
       propertyPath: m_AnchorMax.x
@@ -3857,6 +3857,7 @@ MonoBehaviour:
   commonSoundEffect: {fileID: 750098848}
   buttonTopLeft: {fileID: 591706322}
   buttonTopRight: {fileID: 240100436}
+  spriteAvatar: {fileID: 2025952685}
   textName: {fileID: 1168171559}
   textID: {fileID: 2078738775}
   textChip: {fileID: 412602418}

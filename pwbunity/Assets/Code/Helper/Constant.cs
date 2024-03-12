@@ -4,6 +4,43 @@ namespace Code.Helper
 {
     public abstract class Constant
     {
+        public static readonly string[] LoginPhones = {
+            "+886912000371",
+            "+886912000372",
+            "+886912000373",
+            "+886912000374",
+            "+886912000375",
+            "+886912000376",
+            "+886912000377",
+            "+886912000378",
+            "+886912000379"
+        };
+
+        public static readonly string[] LoginNames = {
+            "Anya",
+            "Celeste",
+            "Evelyn",
+            "Fiona",
+            "Isabella",
+            "Ethan",
+            "James",
+            "Michael",
+            "William"
+        };
+
+        public static readonly string[] LogonAvatars = 
+        {
+            "PlayerAvatar_01",
+            "PlayerAvatar_02",
+            "PlayerAvatar_06",
+            "PlayerAvatar_07",
+            "PlayerAvatar_09",
+            "PlayerAvatar_04",
+            "PlayerAvatar_03",
+            "PlayerAvatar_09",
+            "PlayerAvatar_05",
+        };
+        
         // dev
         public const string ServerURL = "https://dev.cyberpoker.online/api/v1";
         public const string SocketURL = "wss://dev.cyberpoker.online/v1/client-agent";
