@@ -10,6 +10,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Code.Scene
@@ -18,17 +19,15 @@ namespace Code.Scene
     {
         [SerializeField] private TMP_Text txtPrintInfo;
         [SerializeField] private TMP_Text txtSelectAccount;
-        [SerializeField] private Button btnLogin300;
-        [SerializeField] private Button btnLogin301;
-        [SerializeField] private Button btnLogin302;
-        [SerializeField] private Button btnLogin303;
-        [SerializeField] private Button btnLogin304;
-        [SerializeField] private Button btnLogin305;
-        [SerializeField] private Button btnLogin306;
-        [SerializeField] private Button btnLogin307;
-        [SerializeField] private Button btnLogin308;
-        [SerializeField] private Button btnLogin309;
-        [SerializeField] private Button btnLogin310;
+        [SerializeField] private Button btnLoginAnya;
+        [SerializeField] private Button btnLoginCeleste;
+        [SerializeField] private Button btnLoginEvelyn;
+        [SerializeField] private Button btnLoginFiona;
+        [SerializeField] private Button btnLoginIsabella;
+        [SerializeField] private Button btnLoginEthan;
+        [SerializeField] private Button btnLoginJames;
+        [SerializeField] private Button btnLoginMichael;
+        [SerializeField] private Button btnLoginWilliam;
 
         private GameObject _canvas;
         
@@ -56,17 +55,15 @@ namespace Code.Scene
                 }
             }
 
-            btnLogin300.onClick.AddListener(() => { StartLoginFlow("+886912000300"); });
-            btnLogin301.onClick.AddListener(() => { StartLoginFlow("+886912000301"); });
-            btnLogin302.onClick.AddListener(() => { StartLoginFlow("+886912000302"); });
-            btnLogin303.onClick.AddListener(() => { StartLoginFlow("+886912000303"); });
-            btnLogin304.onClick.AddListener(() => { StartLoginFlow("+886912000304"); });
-            btnLogin305.onClick.AddListener(() => { StartLoginFlow("+886912000305"); });
-            btnLogin306.onClick.AddListener(() => { StartLoginFlow("+886912000306"); });
-            btnLogin307.onClick.AddListener(() => { StartLoginFlow("+886912000307"); });
-            btnLogin308.onClick.AddListener(() => { StartLoginFlow("+886912000308"); });
-            btnLogin309.onClick.AddListener(() => { StartLoginFlow("+886912000309"); });
-            btnLogin310.onClick.AddListener(() => { StartLoginFlow("+886912000310"); });
+            btnLoginAnya.onClick.AddListener(() => { StartLoginFlow("+886912000371"); });
+            btnLoginCeleste.onClick.AddListener(() => { StartLoginFlow("+886912000372"); });
+            btnLoginEvelyn.onClick.AddListener(() => { StartLoginFlow("+886912000373"); });
+            btnLoginFiona.onClick.AddListener(() => { StartLoginFlow("+886912000374"); });
+            btnLoginIsabella.onClick.AddListener(() => { StartLoginFlow("+886912000375"); });
+            btnLoginEthan.onClick.AddListener(() => { StartLoginFlow("+886912000376"); });
+            btnLoginJames.onClick.AddListener(() => { StartLoginFlow("+886912000377"); });
+            btnLoginMichael.onClick.AddListener(() => { StartLoginFlow("+886912000378"); });
+            btnLoginWilliam.onClick.AddListener(() => { StartLoginFlow("+886912000379"); });
         }
 
         protected override void SocketOnOpen()
@@ -96,17 +93,15 @@ namespace Code.Scene
         private void SetButtonsVisibility(bool visible)
         {
             txtSelectAccount.gameObject.SetActive(visible);
-            btnLogin300.gameObject.SetActive(visible);
-            btnLogin301.gameObject.SetActive(visible);
-            btnLogin302.gameObject.SetActive(visible);
-            btnLogin303.gameObject.SetActive(visible);
-            btnLogin304.gameObject.SetActive(visible);
-            btnLogin305.gameObject.SetActive(visible);
-            btnLogin306.gameObject.SetActive(visible);
-            btnLogin307.gameObject.SetActive(visible);
-            btnLogin308.gameObject.SetActive(visible);
-            btnLogin309.gameObject.SetActive(visible);
-            btnLogin310.gameObject.SetActive(visible);
+            btnLoginAnya.gameObject.SetActive(visible);
+            btnLoginCeleste.gameObject.SetActive(visible);
+            btnLoginEvelyn.gameObject.SetActive(visible);
+            btnLoginFiona.gameObject.SetActive(visible);
+            btnLoginIsabella.gameObject.SetActive(visible);
+            btnLoginEthan.gameObject.SetActive(visible);
+            btnLoginJames.gameObject.SetActive(visible);
+            btnLoginMichael.gameObject.SetActive(visible);
+            btnLoginWilliam.gameObject.SetActive(visible);
         }
 
         private IEnumerator SendAuthenticate()
