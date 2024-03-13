@@ -22,7 +22,7 @@ type JoinPlayer struct {
 	RedeemChips int64  `json:"redeem_chips"`
 }
 
-func NewpwbtableSetting(competitionID string, competitionMeta CompetitionMeta, tableSetting TableSetting) pwbtable.TableSetting {
+func NewTableSetting(competitionID string, competitionMeta CompetitionMeta, tableSetting TableSetting) pwbtable.TableSetting {
 	return pwbtable.TableSetting{
 		TableID: tableSetting.TableID,
 		Meta: pwbtable.TableMeta{
