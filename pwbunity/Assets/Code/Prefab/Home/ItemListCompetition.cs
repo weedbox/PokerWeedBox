@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-namespace Code.Prefab.Lobby
+namespace Code.Prefab.Home
 {
     public class ItemListCompetition : BasePrefabWithCommonSound
     {

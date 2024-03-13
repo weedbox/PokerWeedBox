@@ -177,7 +177,7 @@ namespace Code.Scene
             }
         }
 
-        private IEnumerator AuthSignup(string phone, GameObject canvas)
+        private static IEnumerator AuthSignup(string phone, GameObject canvas)
         {
             CommonHelper.ShowLoading(canvas);
             const string api = "auth/ge/sign-up";

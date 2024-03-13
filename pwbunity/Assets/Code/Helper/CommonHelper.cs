@@ -35,6 +35,7 @@ namespace Code.Helper
             Debug.unityLogger.Log(logType, currentTime + " " + message);
         }
 
+        // ReSharper disable once UnusedMember.Global
         public static void DownImageFromUrl(MonoBehaviour monoBehaviour, string avatarUrl,
             UnityAction<Sprite> successCallback, UnityAction<string> failCallback)
         {

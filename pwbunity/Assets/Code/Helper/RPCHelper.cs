@@ -46,6 +46,7 @@ namespace Code.Helper
 
         #region PlayerInfo
 
+        // ReSharper disable once UnusedMember.Global
         public void SendGetCurrentPlayer(UnityAction<RPCResponse<RespPlayer>> callback)
         {
             var rpc = new RPCRequest

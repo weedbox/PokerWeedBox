@@ -38,7 +38,7 @@ namespace Code.Helper
             "PlayerAvatar_04",
             "PlayerAvatar_03",
             "PlayerAvatar_09",
-            "PlayerAvatar_05",
+            "PlayerAvatar_05"
         };
         
         // dev
