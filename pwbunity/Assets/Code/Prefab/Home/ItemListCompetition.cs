@@ -11,7 +11,6 @@ namespace Code.Prefab.Home
 {
     public class ItemListCompetition : BasePrefabWithCommonSound
     {
-        [SerializeField] private TMP_Text textID;
         [SerializeField] private TMP_Text textName;
         [SerializeField] private TMP_Text textStatus;
 
@@ -42,7 +41,6 @@ namespace Code.Prefab.Home
                         activeCompetition.TableID);
                 }
             });
-            textID.text = listCompetition.CompetitionID;
             textName.text = listCompetition.Name;
 
             if (activeCompetition == null)

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Code.Base;
 using Code.Helper;
@@ -14,9 +15,8 @@ namespace Code.Scene
 {
     public class HomeScene : BaseScene
     {
-        [SerializeField] private Button buttonTopLeft;
-        [SerializeField] private Button buttonTopRight;
-        [SerializeField] private Image spriteAvatar;
+        [SerializeField] private Button buttonMenu;
+        [SerializeField] private Image imageAvatar;
         [SerializeField] private TMP_Text textName;
         [SerializeField] private TMP_Text textID;
         [SerializeField] private TMP_Text textChip;
@@ -37,9 +37,9 @@ namespace Code.Scene
 
             _canvas = GameObject.Find("Canvas");
 
-            buttonTopLeft.onClick.AddListener(Logout);
-            buttonTopRight.onClick.AddListener(() =>
-                Instantiate(Resources.Load<HomeSubMenu>("Prefabs/Home/HomeSubMenu"), _canvas.transform, false));
+            buttonMenu.onClick.AddListener(Logout);
+            // buttonTopRight.onClick.AddListener(() =>
+            //     Instantiate(Resources.Load<HomeSubMenu>("Prefabs/Home/HomeSubMenu"), _canvas.transform, false));
 
             if (string.IsNullOrEmpty(PlayerPrefs.GetString(Constant.PfKeyUserToken)))
             {
@@ -122,13 +122,11 @@ namespace Code.Scene
                         _totalChip = resp.Result.Chip;
 
                         var displayName = resp.Result.DisplayName;
-
-                        var targetIndex =
-                            new List<string>(Constant.LoginNames).FindIndex(it => string.Equals(it, displayName));
+                        
+                        var targetIndex = new List<string>(Constant.LoginNames).FindIndex(it => string.Equals(it, displayName));
                         if (targetIndex != -1)
                         {
-                            spriteAvatar.sprite =
-                                Resources.Load<Sprite>("Art/Image/Common/Avatar/" + Constant.LogonAvatars[targetIndex]);
+                            imageAvatar.sprite = Resources.Load<Sprite>("Art/Image/Common/Avatar/" + Constant.LogonAvatars[targetIndex]);
                         }
 
                         textName.text = displayName;
@@ -325,8 +323,8 @@ namespace Code.Scene
                                 (competitionId, competitionName) =>
                                 {
                                     // todo find buyInChip
-                                    const long buyInChip = 1000;
-                                    if (long.Parse(_totalChip) <= buyInChip)
+                                    const double buyInChip = 1000;
+                                    if (double.Parse(_totalChip) <= buyInChip)
                                     {
                                         CommonHelper.ShowCommonDialog(
                                             canvas: _canvas,
@@ -340,7 +338,7 @@ namespace Code.Scene
                                     CommonHelper.ShowLoading(_canvas);
                                     ConnectionHelper.Instance.SendCompetitionCashBuyIn(
                                         competitionId,
-                                        buyInChip.ToString(),
+                                        buyInChip.ToString(CultureInfo.CurrentCulture),
                                         cashBuyInResp =>
                                         {
                                             if (!CommonHelper.CheckResponseIsSuccess(_canvas, cashBuyInResp.Method,

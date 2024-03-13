@@ -31,17 +31,6 @@ namespace Code.Prefab.Game
         [SerializeField] private Sprite spriteRaise;
         [SerializeField] private Sprite spriteAllIn;
 
-        [Header("Avatar")] 
-        [SerializeField] private Sprite spriteAvatar1;
-        [SerializeField] private Sprite spriteAvatar2;
-        [SerializeField] private Sprite spriteAvatar3;
-        [SerializeField] private Sprite spriteAvatar4;
-        [SerializeField] private Sprite spriteAvatar5;
-        [SerializeField] private Sprite spriteAvatar6;
-        [SerializeField] private Sprite spriteAvatar7;
-        [SerializeField] private Sprite spriteAvatar8;
-        [SerializeField] private Sprite spriteAvatar9;
-
         [CanBeNull] private GameSoundEffect _gameSoundEffect;
         private string _myId = "";
         private string _latestUserId = "";
@@ -73,7 +62,7 @@ namespace Code.Prefab.Game
             }
             else
             {
-                CheckUpdateName(player.PlayerID, player.Seat);
+                CheckUpdateName(player.PlayerID);
                 textPoint.text = player.Chips.ToString();
             }
         }
@@ -103,12 +92,12 @@ namespace Code.Prefab.Game
         public void SetTablePlayer(TablePlayerState player)
         {
             UpdatePositionInfo(player.Positions);
-            CheckUpdateName(player.PlayerID, player.Seat);
+            CheckUpdateName(player.PlayerID);
             textPoint.text = player.Bankroll.ToString();
             SetIsParticipated(player.IsParticipated);
         }
 
-        private void CheckUpdateName(string playerID, int seat)
+        private void CheckUpdateName(string playerID)
         {
             if (string.Equals(playerID, _latestUserId) && !string.IsNullOrEmpty(_name)) return;
 
@@ -116,7 +105,6 @@ namespace Code.Prefab.Game
 
             gameObjectAvatar.SetActive(false);
             imageAvatar.gameObject.SetActive(false);
-            SetAvatar(seat);
 
             ConnectionHelper.Instance.SendGetPlayer(
                 playerID,
@@ -132,6 +120,7 @@ namespace Code.Prefab.Game
                     {
                         // StartCoroutine(SetAvatar(resp.Result?.AvatarURL));
                         _name = resp.Result?.DisplayName;
+                        SetAvatar(_name);
                         textName.text = CommonHelper.SubString(_name, 7);
                         gameObjectNameAndPoint.gameObject.SetActive(true);
                     }
@@ -155,22 +144,15 @@ namespace Code.Prefab.Game
             imageAvatar.color = color;
         }
 
-        private void SetAvatar(int seatIndex)
+        private void SetAvatar(string displayName)
         {
-            var targetSprite = seatIndex switch
+            var targetIndex = new List<string>(Constant.LoginNames).FindIndex(it => string.Equals(it, displayName));
+            Sprite targetSprite = null;
+            if (targetIndex != -1)
             {
-                0 => spriteAvatar1,
-                1 => spriteAvatar2,
-                2 => spriteAvatar3,
-                3 => spriteAvatar4,
-                4 => spriteAvatar5,
-                5 => spriteAvatar6,
-                6 => spriteAvatar7,
-                7 => spriteAvatar8,
-                8 => spriteAvatar9,
-                _ => null
-            };
-
+                targetSprite = Resources.Load<Sprite>("Art/Image/Common/Avatar/" + Constant.LogonAvatars[targetIndex]);
+            }
+            
             imageAvatar.sprite = targetSprite;
 
             gameObjectAvatar.SetActive(targetSprite);
