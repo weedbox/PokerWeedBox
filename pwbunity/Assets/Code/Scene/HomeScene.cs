@@ -93,7 +93,7 @@ namespace Code.Scene
                         return;
 
                     SendGetPlayerLatestData();
-                    SendListGames();
+                    SendListGames(false);
                 });
         }
 
@@ -105,8 +105,7 @@ namespace Code.Scene
                     if (!CommonHelper.CheckResponseIsSuccess(_canvas, resp.Method, resp.Error,
                             CommonHelper.HideLoading))
                         return;
-
-                    CommonHelper.HideLoading();
+                    
                     if (resp.Result == null)
                     {
                         CommonHelper.ShowCommonDialog(
@@ -136,9 +135,13 @@ namespace Code.Scene
                 });
         }
 
-        private void SendListGames()
+        private void SendListGames(bool withLoading)
         {
-            CommonHelper.ShowLoading(_canvas);
+            if (withLoading)
+            {
+                CommonHelper.ShowLoading(_canvas);
+            }
+            
             ClearCashGameList();
             _listCashCompetitions.Clear();
             ConnectionHelper.Instance.SendListGames(
@@ -266,7 +269,7 @@ namespace Code.Scene
                                 title: "Oops",
                                 message: "no cash game found.",
                                 positive: "Refresh",
-                                positiveCallback: SendListGames,
+                                positiveCallback: () => SendListGames(true),
                                 negative: "Close");
                         }
                         else
@@ -364,7 +367,7 @@ namespace Code.Scene
                                                     CommonHelper.HideLoading))
                                                 return;
 
-                                            SendListGames();
+                                            SendListGames(false);
                                             SendGetPlayerLatestData();
                                         });
                                 },
