@@ -1,9 +1,11 @@
 using System.Collections;
+using System.Collections.Generic;
 using System.Text;
 using Code.Base;
 using Code.Helper;
 using Code.Model.Auth;
 using Code.Model.Base;
+using Code.Model.ClientAgent;
 using Code.Prefab.Login;
 using NativeWebSocket;
 using Newtonsoft.Json;
@@ -138,12 +140,66 @@ namespace Code.Scene
             
             SetButtonsVisibility(false);
             btnLogin.interactable = false;
-            StartCoroutine(AuthLoginCodeSend(phone, GameObject.Find("Canvas")));
+            StartCoroutine(CheckLoginStatus(phone));
         }
 
-        private IEnumerator AuthLoginCodeSend(string phone, GameObject canvas)
+        private IEnumerator CheckLoginStatus(string phone)
         {
-            CommonHelper.ShowLoading(canvas);
+            CommonHelper.ShowLoading(_canvas);
+            const string api = "client-agent/online-players";
+            
+            var url = $"{Constant.ServerURL.Replace("/api", "")}/{api}";
+            
+            var json = JsonConvert.SerializeObject(new ReqCheckLoginStatus { Phones = new List<string> { phone } });
+
+            var unityWebRequest = UnityWebRequest.Post(url, json, "application/json;charset=utf-8");
+            unityWebRequest.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(json));
+            
+            yield return unityWebRequest.SendWebRequest();
+            CommonHelper.HideLoading();
+            if (unityWebRequest.result == UnityWebRequest.Result.Success)
+            {
+                var resp = JsonConvert.DeserializeObject<RespCheckLoginStatus>(unityWebRequest.downloadHandler.text);
+                if (resp.OnlineStates.ContainsKey(phone))
+                {
+                    resp.OnlineStates.TryGetValue(phone, out var isOnline);
+                    if (isOnline)
+                    {
+                        CommonHelper.ShowCommonDialog(
+                            canvas: _canvas,
+                            title: "Warring",
+                            message: "This account has already logged at another device, continue to login?",
+                            positive: "Continue",
+                            positiveCallback: () => StartCoroutine(AuthLoginCodeSend(phone)),
+                            negative: "Cancel",
+                            negativeCallback: () =>
+                            {
+                                SetButtonsVisibility(true);
+                                btnLogin.interactable = true;  
+                            }
+                        );
+                    }
+                    else
+                    {
+                        StartCoroutine(AuthLoginCodeSend(phone));
+                    }
+                }
+                else
+                {
+                    CommonHelper.LogError("phone not found");
+                    StartCoroutine(AuthLoginCodeSend(phone));
+                }
+            }
+            else
+            {
+                CommonHelper.ShowErrorDialog(_canvas, "Result:" + unityWebRequest.result,
+                    () => StartCoroutine(AuthLoginCodeSend(phone)));
+            }
+        }
+
+        private IEnumerator AuthLoginCodeSend(string phone)
+        {
+            CommonHelper.ShowLoading(_canvas);
             const string api = "auth/ge/login-codes/send";
             var url = $"{Constant.ServerURL}/{api}";
 
@@ -164,7 +220,7 @@ namespace Code.Scene
                     .downloadHandler.text);
                 if (resp.Data.IsSuccess)
                 {
-                    StartCoroutine(resp.Data.IsSignUp ? AuthSignup(phone, canvas) : AuthLoginCodeVerify(phone, canvas));
+                    StartCoroutine(resp.Data.IsSignUp ? AuthSignup(phone) : AuthLoginCodeVerify(phone));
                 }
                 else
                 {
@@ -177,9 +233,9 @@ namespace Code.Scene
             }
         }
 
-        private static IEnumerator AuthSignup(string phone, GameObject canvas)
+        private IEnumerator AuthSignup(string phone)
         {
-            CommonHelper.ShowLoading(canvas);
+            CommonHelper.ShowLoading(_canvas);
             const string api = "auth/ge/sign-up";
             var url = $"{Constant.ServerURL}/{api}";
 
@@ -203,9 +259,9 @@ namespace Code.Scene
             }
         }
 
-        private IEnumerator AuthLoginCodeVerify(string phone, GameObject canvas)
+        private IEnumerator AuthLoginCodeVerify(string phone)
         {
-            CommonHelper.ShowLoading(canvas);
+            CommonHelper.ShowLoading(_canvas);
             const string api = "auth/ge/verify/logincode";
             var url = $"{Constant.ServerURL}/{api}";
 

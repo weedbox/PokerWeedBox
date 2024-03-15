@@ -416,6 +416,7 @@ namespace Code.Scene
 
         private static void Logout()
         {
+            ConnectionHelper.Instance.DisconnectWebSocket();
             PlayerPrefs.SetString(Constant.PfKeyUserToken, "");
             SceneManager.LoadScene(nameof(LoginScene));
         }

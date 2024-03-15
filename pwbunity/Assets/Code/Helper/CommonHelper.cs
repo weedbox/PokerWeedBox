@@ -220,16 +220,21 @@ namespace Code.Helper
             if (error == null) return true;
 
             if (!showErrorDialog) return false;
+
+            ShowErrorDialog(canvas, method + "\n" + "Code:" + error.Code + ", Message:" + error.Message, buttonClicked);
             
+            return false;
+        }
+
+        public static void ShowErrorDialog([CanBeNull] GameObject canvas, string message, [CanBeNull] UnityAction buttonClicked = null)
+        {
             ShowCommonDialog(
-                message: method + "\n" + "Code:" + error.Code + ", Message:" + error.Message,
+                message: message,
                 canvas: canvas,
                 title: "Error Occur",
                 positive: "Ok",
                 positiveCallback: buttonClicked,
                 playErrorSound: true);
-            
-            return false;
         }
     }
 }

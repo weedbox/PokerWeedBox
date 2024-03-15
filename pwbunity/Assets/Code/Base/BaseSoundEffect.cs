@@ -8,8 +8,8 @@ namespace Code.Base
         protected static void PlaySound(AudioSource audioSource)
         {
             var volume = CommonHelper.GetSoundEffectVolume();
-            if (volume == 0f) return;
-
+            if (volume == 0f || !audioSource) return;
+            
             audioSource.volume = volume;
             audioSource.Play();
         }
