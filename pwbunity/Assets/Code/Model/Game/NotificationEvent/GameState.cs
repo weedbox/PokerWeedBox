@@ -84,7 +84,7 @@ namespace Code.Model.Game.NotificationEvent
         [JsonProperty("initial_stack_size")] public long InitialStackSize; // bankroll - pot
         [JsonProperty("stack_size")] public long StackSize; // initial_stack_size - wager
         [JsonProperty("pot")] public long Pot;
-        [JsonProperty("wager")] public long Wager;
+        [JsonProperty("wager")] public long Wager; // Set 0 at RoundClosed
 
         // Hole cards information
         [JsonProperty("hole_cards")] [CanBeNull] public List<string> HoleCards;
