@@ -326,7 +326,7 @@ namespace Code.Scene
                                 (competitionId, competitionName) =>
                                 {
                                     // todo find buyInChip
-                                    const double buyInChip = 1000;
+                                    const double buyInChip = 400;
                                     if (double.Parse(_totalChip) <= buyInChip)
                                     {
                                         CommonHelper.ShowCommonDialog(
