@@ -63,6 +63,8 @@ namespace Code.Helper
         public const string SocketOnCompetitionUpdated = "competition_updated";
         public const string SocketOnTableUpdated = "table_updated";
         public const string SocketOnAutoModeUpdated = "game_player_auto_mode_updated";
+        public const string SocketOnNewDeviceUpdated = "system_player_new_device_updated";
+        
 
         public const int TimeoutJitterDelayValue = 9999;
 

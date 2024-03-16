@@ -6,10 +6,12 @@ using Code.Helper;
 using Code.Model;
 using Code.Model.Game.NotificationEvent;
 using Code.Model.System;
+using Code.Scene;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 namespace Code.Base
 {
@@ -85,6 +87,11 @@ namespace Code.Base
             {
                 SendPingTimer(PingIntervalFast);
             }
+        }
+
+        public void UpdateCanvas([CanBeNull] GameObject value)
+        {
+            Canvas = value;
         }
 
         public long GetDiffTimeInMillisecondsWithServer()
@@ -180,6 +187,18 @@ namespace Code.Base
                     {
                         _onAutoMode?.Invoke(
                             JsonConvert.DeserializeObject<AutoModeUpdated>(updateEvent.Event.ToString()));
+                    }
+                    else if (string.Equals(updateEvent.EventName, Constant.SocketOnNewDeviceUpdated))
+                    {
+                        CommonHelper.ShowCommonDialog(Canvas, "Warring",
+                            "Your account has been logged from other device, all action maybe trigger from other player. Continue to play?",
+                            "Continue", null, "Log out",
+                            () =>
+                            {
+                                ConnectionHelper.Instance.DisconnectWebSocket();
+                                PlayerPrefs.SetString(Constant.PfKeyUserToken, "");
+                                SceneManager.LoadScene(nameof(LoginScene));
+                            });
                     }
 
                     return;

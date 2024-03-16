@@ -18,6 +18,7 @@ namespace Code.Base
             _commonSoundEffect = GameObject.FindWithTag("CommonSoundEffect").GetComponent<CommonSoundEffect>();
             
             ConnectionHelper.Instance.SetMonoBehaviour(this);
+            ConnectionHelper.Instance.UpdateCanvas(GameObject.Find("Canvas"));
             ConnectionHelper.Instance.AddOnOpenCallback(SocketOnOpen);
             ConnectionHelper.Instance.AddOnErrorCallback(SocketOnError);
             ConnectionHelper.Instance.AddOnCloseCallback(SocketOnClose);

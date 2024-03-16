@@ -1,4 +1,5 @@
 using Code.Helper;
+using JetBrains.Annotations;
 using NativeWebSocket;
 using UnityEngine;
 using UnityEngine.Events;
@@ -18,6 +19,7 @@ namespace Code.Base
         private UnityAction<WebSocketCloseCode> _onClose;
         
         protected MonoBehaviour MonoBehaviour;
+        [CanBeNull] protected GameObject Canvas;
 
         public bool IsConnected()
         {
