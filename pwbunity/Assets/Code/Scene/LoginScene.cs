@@ -168,7 +168,7 @@ namespace Code.Scene
                         CommonHelper.ShowCommonDialog(
                             canvas: _canvas,
                             title: "Warring",
-                            message: "This account has already logged from another device, continue to login?",
+                            message: "This account has already logged from another device. Continue to login?",
                             positive: "Continue",
                             positiveCallback: () => StartCoroutine(AuthLoginCodeSend(phone)),
                             negative: "Cancel",
